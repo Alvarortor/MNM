@@ -1,0 +1,21 @@
+[Chr]	[Size]
+Chr1_S_cerevisiae_S288C	230218
+Chr2_S_cerevisiae_S288C	813184
+Chr3_S_cerevisiae_S288C	316620
+Chr4_S_cerevisiae_S288C	1531933
+Chr5_S_cerevisiae_S288C	576874
+Chr6_S_cerevisiae_S288C	270161
+Chr7_S_cerevisiae_S288C	1090940
+Chr8_S_cerevisiae_S288C	562643
+Chr9_S_cerevisiae_S288C	439888
+Chr10_S_cerevisiae_S288C	745751
+Chr11_S_cerevisiae_S288C	666816
+Chr12_S_cerevisiae_S288C	1078177
+Chr13_S_cerevisiae_S288C	924431
+Chr14_S_cerevisiae_S288C	784333
+Chr15_S_cerevisiae_S288C	1091291
+Chr16_S_cerevisiae_S288C	948066
+ChrM_S_cerevisiae_S288C	85779
+
+
+

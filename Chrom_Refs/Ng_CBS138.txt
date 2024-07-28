@@ -1,0 +1,14 @@
+[Chr]	[Size]
+ChrA_C_glabrata_CBS138	527800
+ChrB_C_glabrata_CBS138	512655
+ChrC_C_glabrata_CBS138	594526
+ChrD_C_glabrata_CBS138	667900
+ChrE_C_glabrata_CBS138	707423
+ChrF_C_glabrata_CBS138	957515
+ChrG_C_glabrata_CBS138	1010292
+ChrH_C_glabrata_CBS138	1057388
+ChrI_C_glabrata_CBS138	1142525
+ChrJ_C_glabrata_CBS138	1247563
+ChrK_C_glabrata_CBS138	1307090
+ChrL_C_glabrata_CBS138	1528264
+ChrM_C_glabrata_CBS138	1465272

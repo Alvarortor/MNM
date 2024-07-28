@@ -1,0 +1,11 @@
+[Chr]	[Size]
+Chr1_C_albicans_SC5314	3188341
+Chr2_C_albicans_SC5314	2231883
+Chr3_C_albicans_SC5314	1799298
+Chr4_C_albicans_SC5314	1603259
+Chr5_C_albicans_SC5314	1190845
+Chr6_C_albicans_SC5314	1033292
+Chr7_C_albicans_SC5314	949511
+ChrR_C_albicans_SC5314	2286237
+
+

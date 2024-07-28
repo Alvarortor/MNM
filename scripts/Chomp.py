@@ -1,0 +1,84 @@
+#Chomp
+#Purpose: Converts FastA and multiFastA into a .txt format readable by Seqstracter. Allows for extraction of genomic regions. 
+#Usage:  Chomp.py <File.fastA> <OutputName>
+
+#Imports
+import os #So it can search through device
+import re #Regexes
+import sys #Accept input from command line but without needing to type
+
+#Blank statements sthat get overwritten later
+myFile = "none"
+myStrain = "none"
+
+#Error file holder for app
+myEF = "ChompError.txt"
+errpath = os.path.abspath(myEF)
+errFile = open(errpath, "w+");
+
+#Potential errors
+noStrain = "Error: Did not define strain name for output."
+noIn = "Error: Did not define input file."
+noExist = "Error: File does not exist."
+getHelp = "Use the -h option for help"
+use = "Chomp.py <file.txt>"
+
+#input arguments
+try:
+    myFile = sys.argv[1]
+    myStrain = sys.argv[2]
+except IndexError:
+    if myFile == "-h" or myStrain == "-h":  
+        print("Purpose: Converts FastA and multiFastA into a .txt format readable by Seqstracter.\nAllows for extraction of genomic regions.\nUsage:  Chomp.py <File.fastA> <OutputName>")
+        sys.exit()    
+    elif myFile == "none" or myFile == "":
+        print (noIn, getHelp)
+        errFile.write(noIn)
+        errFile.close
+        sys.exit()
+    elif myStrain == "none" or myStrain == "": #need to include blanks to help with program since blank entries may be possible
+        print (noStrain,getHelp, use)
+        errFile.write(noStrain)
+        errFile.close()
+        sys.exit()
+
+#Catches -h in strain spot  
+if myFile == "-h" or myStrain == "-h":  
+    print("Purpose: Converts FastA and multiFastA into a .txt format readable by Seqstracter.\nAllows for extraction of genomic regions.\nUsage:  Chomp.py <File.fastA> <OutputName>")
+    sys.exit()    
+
+#Get path to the file
+try: 
+    inpath = os.path.abspath(myFile)
+    file = open(inpath, 'r')
+except FileNotFoundError:
+    print (noExist, getHelp)
+    errFile.write(noExist)
+    errFile.close()
+    sys.exit()
+
+#Create outputs
+myOF = myStrain + "_chomp.txt"
+outpath = os.path.abspath(myOF)
+outFile = open(outpath, "w");
+
+#small count to help me keep track
+count = 0
+
+
+#Open our input
+
+
+for line in file:
+    if ">" in line:
+        if count == 0:
+            count += 1
+            line = line
+        else:
+            line = "\n" + line #separates second header if its a multifastA
+    else:
+        line = line.replace('\n','')
+    outFile.write(line)
+file.close
+
+print("Done!")
