@@ -54,7 +54,8 @@ for line in file:
     if ">" in line: #leave lines with headers alone
         line = line
     else:
-        line = line[::-1].translate(line.maketrans("ATCG", "TAGC")) #Translates and then flips
+        #line = line.upper()
+        line = line[::-1].translate(line.maketrans("ATCGatcg", "TAGCtagc")) #Translates and then flips
     outFile.write(line)
 
 print ("!enoD")

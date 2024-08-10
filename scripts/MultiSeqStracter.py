@@ -103,7 +103,7 @@ def Trimmer(finalSeq):
     if startPos < 10:
         data = roughSeq[int(startPos):][:int(LEN)]
     elif startPos > 10:
-        comp = roughSeq[::-1].translate(roughSeq.maketrans("ATCG", "TAGC"))
+        comp = roughSeq[::-1].translate(roughSeq.maketrans("ATCGatgc", "TAGCtagc"))
         revstart = comp.find("ATG")
         data = comp[int(revstart):][:int(LEN)]
     return(data)

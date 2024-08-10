@@ -31,10 +31,11 @@ try:
     myMod = sys.argv[2]   #specify modifier
 except IndexError:
     if myIso == "-h" or myMod == "-h":
-        print("help")
+        print(use)
         sys.exit()
     elif myIso == "none":
-        print("Error: No isolate specified")
+        print(noIn, getHelp)
+        errFile.write(noIn)
         sys.exit()
 
 

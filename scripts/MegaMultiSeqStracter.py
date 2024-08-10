@@ -86,6 +86,7 @@ def Puller(roughSeq):
         sqline = sqline.strip()
         if str(sqline) == str(">"+scaffold): #automatically loops
             next_line = SF.readline()
+            next_line = next_line.upper()
             substr = next_line[shortstart:][:longLen]
             return(substr)
             
@@ -96,7 +97,7 @@ def Trimmer(finalSeq):
         data = roughSeq[int(startPos):][:int(LEN)]
         return(data)
     elif startPos > 10:
-        comp = roughSeq[::-1].translate(roughSeq.maketrans("ATCG", "TAGC"))
+        comp = roughSeq[::-1].translate(roughSeq.maketrans("ATCGatgc", "TAGCtagc"))
         revstart = comp.find("ATG")
         data = comp[int(revstart):][:int(LEN)]
         return(data)
@@ -149,7 +150,7 @@ for bug in inIso:
         
             roughSeq = Puller([FS, geneStart, geneEnd, scaffold, seqStart, seqEnd])      
             finalSeq = Trimmer([roughSeq, LEN])
-            myDups.append(iso + "\t" + gene)
+            myDups.append(gene + "\t" + iso)
             
             OF.write(">" + iso +"_" + gene + "_" + seqStart+ "_"+ seqEnd + "_LEN:" + LEN + "\n" + finalSeq + "\n")
             t_stop = process_time()
@@ -165,17 +166,41 @@ if len(myDups) != len(set(myDups)):
     
 else:
     print ("Done!")
+    
+
 for errors in myErrs:
     counter = Counter(myDups)
     duplicates = [item for item, count in counter.items() if count > 1]
 
+#Temporarily stores duplicated data
+temp = list()
+
+err_signal = 0    
 for item in duplicates:
         labels = item.split()
         n = myDups.count(item)
-        error_tag = str(labels[1]) + " appears in " + str(n) + " MUMs for " + labels[0] +", check to make sure it extracted correctly"
-        errors = str(error_tag) #Removes little bracket and commas
-        ErrorFile.write(errors)
+        count = str(n)
+        #error_tag = str(labels[0]) + " appears in " + str(n) + " MUMs for " + labels[1] +"\n"
+        err_signal += 1
+        #errors = str(error_tag) #Removes little bracket and commas
+        gene = str(labels[0])
+        iso = str(labels[1])
+        a = [gene, iso, count]
+        temp.append(a)
         
+
+b = 0
+a = sorted(temp)
+for labels in a:
+    n = myDups.count(item)
+    error_tag = str(labels[0]) + " appears in " + labels[2] + " MUMs for " + labels[1] +"\n"    
+    a.pop(0)
+    ErrorFile.write(error_tag)
+
+
 tot_end = process_time()
 time_diff = str(tot_end - tot_start)
 print("Total run time was : " + time_diff + "(s)")
+
+if err_signal > 0:
+    os.startfile("MMSSErrors.txt")

@@ -136,16 +136,17 @@ for iso in isofile:
 err_signal = 0
 #Checks for unfound
 if len(set(myUnfound)) > 0:
+
     ErPath = os.path.abspath("MMGS_Errors.txt")
     ErrorFile = open(ErPath, "w");
     for element in set(myUnfound):
         if element not in set(myFound):
+            if my_mod == "none":
+                fend = myIso + ".txt"
+            else:
+                fend = myIso + my_mod + ".txt"
             err_signal += 1
             data = element.split()
-            if my_mod == "none":
-                fend = data[0] + ".txt"
-            else:
-                fend = data[0] + my_mod + ".txt"
             err_mess = str("Could not find " + data[1] + " for " + data[0] + " in " + fend)
             myErrs.append(str(err_mess))
 

@@ -8,6 +8,7 @@ from Bio import SeqIO
 import time
 from time import process_time
 from zipfile import ZipFile
+from pathlib import Path
 
 #Purpose: Combines functions of N2M, batchentrez tools and Cleanerfile into one
 #Usage:  GeneGetter.py <file.txt> <output prefix>
@@ -33,9 +34,11 @@ use = "GeneGetter.py <file.mums>"
 
 
 genenames = list()
+dic = list()
+comps = list()
 UIDList = list()
 
-
+#Dictionary entry should be CAGName, pair name w/ id to make it easier
 #input arguments
 try:
     myFile = sys.argv[1]
@@ -68,9 +71,7 @@ tempfile = open(temppath,"w")
 file = open(inpath)
 
 for line in file:
-    if "ID:" in line: #Hunts for lines with ID tag in them
-        line = (line[4:])
-        genenames.append(line.strip() + "\n") #Removes trailing newline
+    genenames.append(line.strip())
         
 #Need to avoid whitespace or the program gets mad
 listlen = len(genenames)
@@ -78,10 +79,9 @@ myline = 0
 
 #Passing to BatchEntrez
 for gene in genenames:
-    print(myline)
     myline += 1
     Entrez.email = email
-    handle = Entrez.esearch(db="gene",retmax = 1, term = gene)
+    handle = Entrez.esearch(db="gene",retmax = 2, term = gene)
     record = Entrez.read(handle)
     string = str(record)
     ids = string.index('IdList') + 9
@@ -93,6 +93,10 @@ for gene in genenames:
     split2 = split1.replace("'", " ")
     split3 = split2.split(",")
     
+    mynum = split3[0]
+    ref = (gene + " " + mynum.strip())
+    dic.append(ref)
+    #print(string)
     for seq in split3:
         if listlen != myline:
             seq = seq.strip() + "\n"
@@ -101,8 +105,16 @@ for gene in genenames:
         tempfile.write(seq)
         handle.close()
         
-
 tempfile.close()
+
+#Rearrange data to make nice
+for entry in dic:
+    test  = entry.split(" ")
+    names = test[0]
+    Ids = test[1]
+    newentry = (names, Ids)
+    comps.append(newentry)
+    
 
 #Runs command in native console
 command ="scripts\datasets download gene gene-id --inputfile Nums.txt --include gene"
@@ -111,17 +123,22 @@ os.system(command)
 #Now you pull the Zip and extract the relevant file
 archive = ZipFile('ncbi_dataset.zip')
 
-for file in archive.namelist():
-    if file.startswith('gene.fna'):
-        archive.extract(file, 'PythonUI')
+for path in archive.namelist():
+   # print(path)
+    if 'gene.fna' in path:
+        a = (archive.infolist())
+        genefile = (a[1])
+        archive.extract(genefile)
+        archive.close()
 
 
 #Get path to the file
 try:
-    inpath = os.path.abspath("gene.fna")
+    inpath = os.path.abspath("ncbi_dataset\data\gene.fna")
     file = open(inpath, 'r')
 except FileNotFoundError:
     print (noExist, getHelp, use)
+    raise KeyError (print("Help me"))
     errFile.write(noExist)
     errFile.close()
     sys.exit()
@@ -137,14 +154,22 @@ outFile = open(outpath, "w");
 count = 0
 for line in file:
     if ">" in line:
+       # print(line)
         line = line.split(" ")
-        if count != 1:
-            data = ">" + line[1] + "\n"
-            count += 1
-        else:
-            data = "\n" + ">" + line[1] + "\n"
+        ID = line[4]
+        num = (ID[8:][:-1])
+        for refs in comps:
+            if num == refs[1]:
+                if count != 1:
+                    data = ">" + refs[0] + "_" + line[1] + "_" + refs[1] +  "\n"
+                    count += 1
+                   
+                else:
+                    data = "\n" + ">" + refs[0] + "_" + line[1] + "_" + refs[1] +  "\n"
+                
     else:
-        data = line.rstrip()
-    outFile.write(data)
+        data = line.strip()
+    print(data)
+           # outFile.write(data)
 
 

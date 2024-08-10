@@ -40,7 +40,7 @@ except IndexError:
         print(noIn,getHelp)
         errFile.write(noIn)
         errFile.close()
-        sys.exit(
+        sys.exit()
     elif myCF == "none":
         print(noCF,getHelp)
         errFile.write(noCF)
