@@ -19,10 +19,12 @@ from PyQt5.QtGui import *
 
 #Default state is no errors, gets changed when theres an issue
 global error
+global loaded
 global m
 global w
 global w1
 error = False
+
 
 
 
@@ -33,44 +35,54 @@ class MainWindow(QMainWindow):
         app = QApplication(sys.argv) #Add a menubar with citations?
         widget = QWidget()
         
+        #Aesthetic options
+        button_height = 50
+        button_width = 170
+        square = 200
+
         
         #Hold QR code to github
         text = QPushButton(widget)
-        image = QPixmap('assets\QR.png')
-        image = image.scaled(175,175)
-        text.move(200,50)
+        image = QPixmap('Main/assets/QR.png')
+        image = image.scaled(square-5,square-5)
+        text.move(200,65)
         text.setIcon(QIcon(image))
-        text.setFixedSize(175,175)
-        text.setIconSize(QSize(200,200))
+        text.setFixedSize(square, square)
+        text.setIconSize(QSize(square, square))
         text.setToolTip("Alvaro's GitHub")
         text.clicked.connect(openGitHub)
         
-        
         text1 = QLabel(widget)
-        text1.setText("Select which type of analysis to perform:")
+        text1.setText("Select analysis type:")
         text1.move(15,15)
-        text1.setFont(QFont('Arial', 11))
+        text1.setFont(QFont('Arial', 12))
         
         button1 = QPushButton(widget)
-        button1.setText("String Manipulation")
-        button1.setGeometry(15,60,150,40)
-        button1.setFont(QFont('Arial',10))
+        button1.setText("String Manipulation") 
+        button1.setGeometry(15,60,button_width,button_height)
+        button1.setFont(QFont('Arial',11))
         button1.clicked.connect(manip_options)
 
         button2 = QPushButton(widget)
         button2.setText("String Extraction")
-        button2.setGeometry(15,120,150,40)
-        button2.setFont(QFont('Arial', 10))
+        button2.setGeometry(15,120,button_width,button_height)
+        button2.setFont(QFont('Arial', 11))
         button2.clicked.connect(ext_options)
-
+        
         button3 = QPushButton(widget)
-        button3.setText("Help")
-        button3.setGeometry(15,180,150,40)
-        button3.setFont(QFont('Arial', 10))
-        button3.clicked.connect(help_options) #Just opens the ReadMe file
+        button3.setText("Pre-built workflows")
+        button3.setGeometry(15,180,button_width,button_height)
+        button3.setFont(QFont('Arial', 11))
+        button3.clicked.connect(premade)
+
+        button4 = QPushButton(widget)
+        button4.setText("Help")
+        button4.setGeometry(15,240,button_width,button_height)
+        button4.setFont(QFont('Arial', 11))
+        button4.clicked.connect(help_options) #Just opens the ReadMe file
         
             
-        widget.setGeometry(400,400,425,250)
+        widget.setGeometry(400,400,425,300) #Pos X,pos y, width, height
         widget.setWindowTitle("MUM's n' More")
 
         widget.show()
@@ -91,14 +103,40 @@ class NotYet(QWidget):
         self.setWindowTitle("Sorry Homie")
         self.setFont(QFont('Arial', 10))
 
+
+    
 #Manipulation programs     
 class ManipWindow(QWidget):
     def __init__(self): #Make font bigger as I add subfunctions
         super().__init__()
 
-        
+
+
         
         layout = QVBoxLayout()
+        
+        
+        #Define menu with sample protocols
+       # menu = QMenuBar();
+       # menu.setStyleSheet("background-color: transparent")
+       # menu.setFont(QFont('Arial', 10))
+        
+       # prot = menu.addMenu("Protocols")
+       # prot.setStyleSheet("background-color: white; color: black; selection-color: blue; selection-background-color: gainsboro;")
+  
+       # SNPS = prot.addAction("Find SNPs")
+       # prot.triggered.connect(openSNPs)
+        
+       # FGenes = prot.addAction("Find Genes")
+        #GSeq = prot.addAction("Get Sequences")
+        
+        
+        
+        
+       # layout.addWidget(menu)
+
+        
+        
         self.label1 = QLabel("Text/FastA Manipulation Tools")
         self.label1.setFont(QFont('Arial', 12))
         layout.addWidget(self.label1)
@@ -217,6 +255,8 @@ class ExtracWindow(QWidget):
         self.label1.setFont(QFont('Arial', 12))
         layout.addWidget(self.label1)
         
+        grid = QGridLayout()
+        
         self.btn1 = QPushButton("SeqStracter")
         self.btn1.setFont(QFont('Arial', 10))
         layout.addWidget(self.btn1)
@@ -230,7 +270,7 @@ class ExtracWindow(QWidget):
         self.btn3 = QPushButton("MegaMultiSeqStracter")
         self.btn3.setFont(QFont('Arial', 10))
         layout.addWidget(self.btn3)
-        self.btn3.clicked.connect(mmseqstract_time)   
+        self.btn3.clicked.connect(mmseqstract_time)        
         
         self.label2 = QLabel("Gene Extraction Tools")
         self.label2.setFont(QFont('Arial', 12))
@@ -238,18 +278,25 @@ class ExtracWindow(QWidget):
         
         self.btn4 = QPushButton("GeneStracter") 
         self.btn4.setFont(QFont('Arial', 10))
-        layout.addWidget(self.btn4)
+        grid.addWidget(self.btn4,0,0)
         self.btn4.clicked.connect(genestract_time)   
         
         self.btn5 = QPushButton("MultiGeneStracter")
         self.btn5.setFont(QFont('Arial', 10))
-        layout.addWidget(self.btn5)
-        self.btn5.clicked.connect(mgenestract_time)   
-        
-        self.btn6 = QPushButton("MegaMultiGeneStracter")
+        grid.addWidget(self.btn5,0,1)
+        self.btn5.clicked.connect(mgenestract_time)
+
+        self.btn6 = QPushButton("MegaGeneStracter")
         self.btn6.setFont(QFont('Arial', 10)) 
-        layout.addWidget(self.btn6)
-        self.btn6.clicked.connect(mmgenestract_time)   
+        grid.addWidget(self.btn6,1,0)
+        self.btn6.clicked.connect(Mgenestract_time)   
+        
+        self.btn6a = QPushButton("MegaMultiGeneStracter")
+        self.btn6a.setFont(QFont('Arial', 10)) 
+        grid.addWidget(self.btn6a,1,1)
+        self.btn6a.clicked.connect(mmgenestract_time)   
+        
+        layout.addLayout(grid)
         
         self.btn7 = QPushButton("RandoPuller")
         self.btn7.setFont(QFont('Arial', 10))
@@ -262,12 +309,68 @@ class ExtracWindow(QWidget):
         layout.addWidget(self.btn12)
         self.btn12.clicked.connect(selfhide)   
         
+        
         self.setLayout(layout) 
         self.setGeometry(400,400,425,250)
         self.setWindowTitle("String Extraction")
         self.show()    
-  
-#Checks for errors and creates message if any appear
+
+#Premade workflows
+class PreMade(QWidget):
+     def __init__(self): #Make font bigger as I add subfunctions
+        super().__init__()
+        layout = QGridLayout()
+        
+        b_wide = 170
+        b_tall = 50
+        #How to make it look
+        #Main area with the workflow purposes?
+        #Put the steps to the right?
+        
+        left = QVBoxLayout()
+        but1 = QPushButton("Find genes in \n unassembled genome")
+        but2 = QPushButton("Locate SNPs \n within target  genes")
+        
+        but1.setFont(QFont('Arial', 10))
+        but2.setFont(QFont('Arial', 10))
+        
+        
+        but1.setFixedSize(b_wide,b_tall)
+        
+        left.addWidget(but1)
+        left.addWidget(but2)
+        
+        #Steps
+        right = QVBoxLayout()
+        
+        text = QLabel("Program description:")
+        text.setFont(QFont('Arial', 10))
+        
+        desc = QLineEdit()
+        desc.setFixedSize(250,175) # Wide, tall
+        
+        right.addWidget(text)
+        right.addWidget(desc)
+        
+        
+        
+        layout.addLayout(left, 0, 0)
+        layout.addLayout(right, 0,1)
+        
+        
+
+            #Click on it to open second page
+            # Side scrollable area with the stages and explanation of what each step does?
+
+        
+        
+        #Window properties
+        self.setLayout(layout) 
+        self.setGeometry(400,400,425,200)
+        self.setWindowTitle("Prebuilt Workflows")
+        self.show()    
+        
+#If you're seeing this there are problems
 class Error(QWidget):
     global error
 
@@ -275,36 +378,70 @@ class Error(QWidget):
         super().__init__()
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
-        msg.setText("Whoops!")
-        msg.setInformativeText(errMess + " Specify path if not in the same directory.")
+        test = QLabel("Something went wrong!")
+        msg.setText("Something went wrong!")
+        msg.setFont(QFont('Arial',12))
+        errMess = QPlainTextEdit()
+        errMess = open('Error.log').read()
+        msg.setInformativeText(errMess + "\nRunning with command line may provide additional information.")
         msg.setFont(QFont('Arial',10))
         msg.setWindowTitle("Error!")
-        msg.setGeometry(450,400,250,100)
+        msg.setGeometry(450,400,250,120)
         error = error_hold()
         
         msg.exec_()
-        print(error)
+        
+
+#Hey you dont have PERL installed!
+class PerlInstall(QWidget):
+    def __init__(self): #Make font bigger as I add subfunctions
+        super().__init__()
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setTextFormat(Qt.RichText); 
+        msg.setText("PERL not found on this machine!" )
+        msg.setInformativeText("ATGC cannot locate PERL on this machine, please install PERL for the selected script to work.")
+        msg.addButton(QMessageBox.Ok)
+        
+
+        installperl = msg.addButton('Install Now',QMessageBox.YesRole)
+        installperl.clicked.disconnect()
+        installperl.clicked.connect(perl_link) #Default for windows since macs tend to have it installed
+        msg.setFont(QFont('Arial',10))
+        msg.setWindowTitle("PERL Missing")
+        
+        msg.setGeometry(450,400,250,250)
+        msg.exec_()
+
+
 
 class Working(QWidget): #Mayeb finalize later? I don't know how to make it work and I dont want to try rn
     def __init__(self): #Make font bigger as I add subfunctions
         super().__init__()
-        msg = QVBoxLayout()
+        global loaded
+        msg = QProgressDialog()
         
-        text = QLabel("This process takes some time.")
+        text = QLabel("This process may take some time.")
         text.setWordWrap(True)
-        text.setFont(QFont('Arial',10))
+        text.setFont(QFont('Arial',12))
+        
+        my_label = QLabel()
+        movie = QMovie('Main/assets/Load2.gif')
+        movie.setScaledSize(QSize(250,250))
+        my_label.setMovie(movie)
+        movie.start()
+      #  msg.addWidget(my_label)
+       # msg.addWidget(text)
+      #  
+       # self.setLayout(msg)
+        msg.setWindowTitle("Working")
+        msg.setGeometry(550,300,300,100)
+        Working2()
         
 
-        
-        progress = QProgressBar(self)
-        progress.setGeometry(200, 100, 300, 50)
-        
-        msg.addWidget(text)
-        msg.addWidget(progress)
-        
-        self.setLayout(msg)
-        self.setWindowTitle("In Progress")
-        self.setGeometry(550,300,300,100)
+
+
+
  
         
         
@@ -509,6 +646,7 @@ class Zelda(QWidget):
     def __init__(self): #Make font bigger as I add subfunctions
         super().__init__()    
         global usrin1
+        global usrin2
         global marg1
         global infolbl
         
@@ -565,13 +703,14 @@ class Zelda(QWidget):
         
         layout.addWidget(start,2,2)
         self.setLayout(layout)
-        self.setGeometry(850,400,600,100)
+        self.setGeometry(850,400,600,200)
         self.setWindowTitle("Zelda")
         
 class Link(QWidget):
     def __init__(self): #Make font bigger as I add subfunctions
         super().__init__()    
         global usrin1
+        global usrin2
         global marg1
         global infolbl
         
@@ -830,20 +969,43 @@ class MUMi(QWidget):
         global marg3
         global infolbl
         global pl_btn
+        global icon_btn
 
 
         
         layout = QGridLayout()
         
         tb = QToolBar();
+        tb.setStyleSheet("background-color: transparent")
+        
+        
+        #Example button
         ex_btn = QAction("Example",self)
-        pl_btn = QAction("Perl Check",self)
         tb.addAction(ex_btn)
-        tb.addAction(pl_btn)
         ex_btn.triggered.connect(MUMi_ex)
+        
+        
+        #Checks to see if perl is installed and provides a visual indicator
+        pl_btn = QAction("PERL Check",self)
+        tb.addAction(pl_btn)
         pl_btn.triggered.connect(perlCheck)
+        
+        
+        icon_btn = QAction(QIcon("Main/assets/status-offline.png"),"", self)
+        tb.addAction(icon_btn)
+        icon_btn.setEnabled(False)
+
+        
+        
+        
+
+        
+        
         infolbl = QLabel(" ")
+        
+        #basically so you can copy paste the numbers
         infolbl.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        
         infolbl.setFont(QFont('Arial',10))
         layout.setMenuBar(tb)
         
@@ -852,7 +1014,6 @@ class MUMi(QWidget):
         imptext = QLabel("Will NOT work unless PERL is installed!")
         imptext.setFixedHeight(30)
         imptext.setStyleSheet("font-weight: bold;font-size: 8; color: red")
-
         tb.addWidget(imptext)
 
         backbtn = QPushButton("Back")
@@ -926,7 +1087,7 @@ class MUMi(QWidget):
         
         
         self.setLayout(layout)
-        self.setGeometry(850,400,470,100)
+        self.setGeometry(850,400,480,100)
         self.setWindowTitle("MUMi")
 
 class N2M (QWidget):
@@ -1123,7 +1284,7 @@ class Done(QWidget): #Run anytime program finishes
         
         
         text = QLabel()
-        image = QPixmap('assets\Yes.jpg')
+        image = QPixmap('Main/assets/Yes.jpg')
         image = image.scaled(175,175)
         text.move(200,50)
         text.setPixmap(image)
@@ -1415,6 +1576,7 @@ class MMSeqStrac(QWidget):
         usrin1 = QLineEdit()
         usrin1.setFont(QFont('Arial',10))
         self.usrin1 = usrin1
+        marg1 = self.usrin1.textChanged.connect(marg1_hold)
         self.usrin1.setText("Iso_List.txt")
         
         prompt1 = QLabel("Select Isolate File")
@@ -1423,7 +1585,7 @@ class MMSeqStrac(QWidget):
         
         row1.addWidget(prompt1)
         row1.addWidget(self.usrin1)
-        marg1 = self.usrin1.textChanged.connect(marg1_hold)
+        
         
         pickFile1 = QPushButton("Browse")
         pickFile1.setFont(QFont('Arial',10))
@@ -1439,10 +1601,11 @@ class MMSeqStrac(QWidget):
         usrin2 = QLineEdit()
         self.usrin2 = usrin2
         self.usrin2.setFont(QFont('Arial',10))
-        self.usrin2.setText(" ")
+        marg2 = self.usrin2.textChanged.connect(marg2_hold)
+        self.usrin2.setText("")
         row2.addWidget(self.usrin2)
         
-        marg2 = self.usrin2.textChanged.connect(marg2_hold)
+        
         
                
         Go = QPushButton("Extract!")
@@ -1450,9 +1613,9 @@ class MMSeqStrac(QWidget):
         Go.setFont(QFont('Arial',10))
         self.Go = Go
 
+
         Go.pressed.connect(mmseqstract)
         Go.pressed.connect(finished_Process)
-        
         row3.addWidget(Go)
         
         layout.addLayout(row1,0,0)
@@ -1463,7 +1626,7 @@ class MMSeqStrac(QWidget):
         
         self.setLayout(layout)
         self.setGeometry(850,400,475,250)
-        self.setWindowTitle("MultiSeqStracter")
+        self.setWindowTitle("MegaMultiSeqStracter")
 class GeneStrac(QWidget):
     def __init__(self): #Make font bigger as I add subfunctions
         super().__init__()
@@ -1525,7 +1688,7 @@ class GeneStrac(QWidget):
         usrin2 = QLineEdit()
         self.usrin2 = usrin2
         self.usrin2.setFont(QFont('Arial',10))
-        self.usrin2.setText(" ")
+        self.usrin2.setText("")
         row2.addWidget(self.usrin2)
         
         marg2 = self.usrin2.textChanged.connect(marg2_hold)
@@ -1551,6 +1714,119 @@ class GeneStrac(QWidget):
         self.setGeometry(850,400,475,250)
         self.setWindowTitle("Genestracter")
 class MGeneStrac(QWidget):
+    def __init__(self): #Make font bigger as I add subfunctions
+        super().__init__()
+        global usrin1
+        global usrin2
+        global usrin3
+        global marg1
+        global marg2
+        global marg3
+        global infolbl
+        
+        layout = QGridLayout()
+
+        row1 = QHBoxLayout()
+        row2 = QGridLayout()
+        row3 = QGridLayout()
+        row4 = QGridLayout()
+        
+        tb = QToolBar();
+        ex_btn = QAction("Example",self)
+
+        tb.addAction(ex_btn);
+        ex_btn.triggered.connect(Mgenestract_ex)
+        infolbl = QLabel(" ")
+        infolbl.setFixedSize(220, 50)
+        infolbl.setWordWrap(True)
+        layout.setMenuBar(tb)
+        
+        
+        backbtn = QPushButton("Back")
+        backbtn.setFixedWidth(80)
+        backbtn.setFont(QFont('Arial',10))
+        backbtn.clicked.connect(back)
+        row4.addWidget(backbtn,0,0,QtCore.Qt.AlignLeft)
+        row4.addWidget(infolbl,0,1)
+
+        filler = QLabel(" ")
+        filler.setFixedWidth(200)
+        
+        usrin1 = QLineEdit()
+        usrin1.setFont(QFont('Arial',10))
+        self.usrin1 = usrin1
+        self.usrin1.setFixedWidth(300)
+        self.usrin1.setText("")
+        
+        prompt1 = QLabel("Select Isolate File")
+        prompt1.setWordWrap(True)
+        prompt1.setFont(QFont('Arial', 10)) 
+        prompt1.setFixedWidth(100)
+        
+        row1.addWidget(prompt1)
+        row1.addWidget(self.usrin1)
+        marg1 = self.usrin1.textChanged.connect(marg1_hold)
+        
+        pickFile1 = QPushButton("Browse")
+        pickFile1.setFont(QFont('Arial',10))
+        fn1 = pickFile1.clicked.connect(file1_find)
+        row1.addWidget(pickFile1)
+   
+        prompt2 = QLabel("Enter Gene:")
+        prompt2.setWordWrap(True)
+        prompt2.setFixedWidth(100)
+        prompt2.setFont(QFont('Arial',10))
+        row2.addWidget(prompt2,0,0)
+        
+        usrin2 = QLineEdit()
+        self.usrin2 = usrin2
+        self.usrin2.setFixedWidth(200)
+        self.usrin2.setFont(QFont('Arial',10))
+        self.usrin2.setText("")
+        row2.addWidget(self.usrin2,0,1)
+        row2.addWidget(filler,0,2)
+        
+        marg2 = self.usrin2.textChanged.connect(marg2_hold)
+        
+        prompt3 = QLabel("File Modifier:")
+        prompt3.setWordWrap(True)
+        prompt3.setFixedWidth(100)
+        prompt3.setFont(QFont('Arial',10))
+        row3.addWidget(prompt3,0,0)
+        row3.addWidget(filler,0,2)
+        
+        usrin3 = QLineEdit()
+        self.usrin3 = usrin3
+        self.usrin3.setFont(QFont('Arial',10))
+        self.usrin3.setText("")
+        row3.addWidget(self.usrin3,0,1)
+        
+        marg3 = self.usrin3.textChanged.connect(marg3_hold)
+        
+               
+        Go = QPushButton("Extract!")
+        Go.setFixedWidth(80)
+        Go.setFont(QFont('Arial',10))
+        self.Go = Go
+        
+        
+        Go.pressed.connect(Mgenestracter)
+        Go.pressed.connect(finished_Process)
+       # Go.pressed.connect(Working)
+        
+        row4.addWidget(Go,0,2,QtCore.Qt.AlignRight)
+        
+        layout.addLayout(row1,0,0)
+        layout.addLayout(row2,1,0)
+        layout.addLayout(row3,2,0)
+        layout.addLayout(row4,3,0)
+
+        
+        
+        self.setLayout(layout)
+        self.setGeometry(850,400,475,250)
+        self.setWindowTitle("MegaGenestracter")
+class mGeneStract(QWidget):
     def __init__(self): #Make font bigger as I add subfunctions
         super().__init__()
         global usrin1
@@ -1592,9 +1868,9 @@ class MGeneStrac(QWidget):
         usrin1 = QLineEdit()
         usrin1.setFont(QFont('Arial',10))
         self.usrin1 = usrin1
-        self.usrin1.setText("Gene_File.txt")
         
-        prompt1 = QLabel("Select Gene File")
+        
+        prompt1 = QLabel("Select Isolate File")
         prompt1.setWordWrap(True)
         prompt1.setFont(QFont('Arial', 10)) 
         prompt1.setFixedWidth(100)
@@ -1602,13 +1878,14 @@ class MGeneStrac(QWidget):
         row1.addWidget(prompt1)
         row1.addWidget(self.usrin1)
         marg1 = self.usrin1.textChanged.connect(marg1_hold)
+        self.usrin1.setText("")
         
         pickFile1 = QPushButton("Browse")
         pickFile1.setFont(QFont('Arial',10))
         fn1 = pickFile1.clicked.connect(file1_find)
         row1.addWidget(pickFile1)
    
-        prompt2 = QLabel("Select Isolate:")
+        prompt2 = QLabel("Select Gene:")
         prompt2.setWordWrap(True)
         prompt2.setFixedWidth(100)
         prompt2.setFont(QFont('Arial',10))
@@ -1618,11 +1895,12 @@ class MGeneStrac(QWidget):
         self.usrin2 = usrin2
         self.usrin2.setFixedWidth(100)
         self.usrin2.setFont(QFont('Arial',10))
-        self.usrin2.setText(" ")
+        
         row2.addWidget(self.usrin2,0,1)
         row2.addWidget(filler,0,2)
         
         marg2 = self.usrin2.textChanged.connect(marg2_hold)
+        self.usrin2.setText("")
         
         prompt3 = QLabel("File Modifier:")
         prompt3.setWordWrap(True)
@@ -1635,10 +1913,11 @@ class MGeneStrac(QWidget):
         self.usrin3 = usrin3
         self.usrin3.setFixedWidth(100)
         self.usrin3.setFont(QFont('Arial',10))
-        self.usrin3.setText(" ")
+        
         row3.addWidget(self.usrin3,0,1)
         
         marg3 = self.usrin3.textChanged.connect(marg3_hold)
+        self.usrin3.setText("")
         
                
         Go = QPushButton("Extract!")
@@ -1703,6 +1982,7 @@ class MMGeneStrac(QWidget):
         usrin1 = QLineEdit()
         usrin1.setFont(QFont('Arial',10))
         self.usrin1 = usrin1
+        marg1 = self.usrin1.textChanged.connect(marg1_hold)
         self.usrin1.setText("Isolate_File.txt")
         
         prompt1 = QLabel("Select Gene File")
@@ -1712,7 +1992,7 @@ class MMGeneStrac(QWidget):
         
         row1.addWidget(prompt1)
         row1.addWidget(self.usrin1)
-        marg1 = self.usrin1.textChanged.connect(marg1_hold)
+        
         
         pickFile1 = QPushButton("Browse")
         pickFile1.setFont(QFont('Arial',10))
@@ -1728,6 +2008,7 @@ class MMGeneStrac(QWidget):
         usrin2 = QLineEdit()
         self.usrin2 = usrin2
         self.usrin2.setFont(QFont('Arial',10))
+        marg2 = self.usrin2.textChanged.connect(marg2_hold)
         self.usrin2.setText("Gene_List.txt")
         row2.addWidget(self.usrin2,0,1)
         #row2.addWidget(filler,0,2)
@@ -1736,7 +2017,7 @@ class MMGeneStrac(QWidget):
         pickFile2.setFont(QFont('Arial',10))
         fn2 = pickFile2.clicked.connect(file2_find)
         row2.addWidget(pickFile2,0,2)
-        marg2 = self.usrin2.textChanged.connect(marg2_hold)
+        
         
         prompt3 = QLabel("File Modifier:")
         prompt3.setWordWrap(True)
@@ -1749,7 +2030,7 @@ class MMGeneStrac(QWidget):
         self.usrin3 = usrin3
         self.usrin3.setFixedWidth(100)
         self.usrin3.setFont(QFont('Arial',10))
-        self.usrin3.setText(" ")
+        self.usrin3.setText("")
         row3.addWidget(self.usrin3,0,1)
         
         marg3 = self.usrin3.textChanged.connect(marg3_hold)
@@ -1865,18 +2146,32 @@ def back(self):
     w.show()
 def selfhide(self):
     w.hide() #This feels like cheating but it works
+
+
+#PERL checker and installation options
 def perlCheck(self):
+    global icon_btn
+    
     a = os.system("perl -v")
+
     if a == 0:
         pl_btn.setText("PERL Found")
+        icon_btn.setIcon(QIcon("Main/assets/tick.png"))
+
     else:
         pl_btn.setText("PERL NOT FOUND")
+        icon_btn.setIcon(QIcon("Main/assets/prohibition.png"))
+        PerlInstall()
+def perl_link(self):
+    webbrowser.open('https://strawberryperl.com/')
+ 
+
  
 def whymail(self):
     webbrowser.open("https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch")
 
 def chomp_ex(self):
-    usrin1.setText(r"examples\DNA.txt")
+    usrin1.setText(r"Main\examples\DNA.txt")
     usrin2.setText("DNA")
     infolbl.setText("Output is: DNA_chomp.txt")  
 def chomp_time(self):
@@ -1894,24 +2189,17 @@ def chomp():
         
     program = QProcess()
     arguments = list()
-    arguments.append('scripts\Chomp.py')
+    arguments.append('Main\scripts\Chomp.py')
     arguments.append(arg1)
     arguments.append(arg2)
     args = " ".join(arguments)
-    if os.path.isfile(arg1) == True and arg2 != "none" and arg2 != "":#See if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('ChompError.txt').read()
-      #  print(errMess)
-        error_hold()
-        Error()
+    
+    os.system(args)
+
 
 
 def flip_ex(self):
-    usrin1.setText(r"examples\seq.txt")
+    usrin1.setText(r"Main\examples\seq.txt")
     infolbl.setText("Output is: RevCom.txt")   
 def flip_time(self):
     global w1
@@ -1927,23 +2215,17 @@ def flip():
         arg1 = "none"
         
         
-    arguments.append('scripts\Flipper.py')
+    arguments.append('Main\scripts\Flipper.py')
     arguments.append(arg1)
     args = " ".join(arguments)
 
-    if os.path.isfile(temp1) == True: #Checks to see if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('FlipError.txt').read()
-        print(errMess)
-        error_hold()
-        Error()
+    
+    os.system(args)
+
+
 
 def bunk_ex(self):
-    usrin1.setText("examples\BedIn_Ex.txt")
+    usrin1.setText("Main\examples\BedIn_Ex.txt")
     infolbl.setText("Output is: TuckedIn.txt")      
 def bunk_time(self):
     global w1
@@ -1968,24 +2250,16 @@ def bunk():
         temp3 = "none"
         
     #Combine everything  
-    arguments.append('scripts\BunkBed.py')
+    arguments.append('Main\scripts\BunkBed.py')
     arguments.append(temp1)  
     arguments.append(temp2)
     arguments.append(temp3)
     args = " ".join(arguments)
-    if os.path.isfile(temp1) == True: #Checks to see if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('BedError.txt').read()
-        print(errMess)
-        error_hold()
-        Error()
-
+    os.system(args)
+    
 def zeld_ex(self):
-    usrin1.setText(r"examples\Iso_ListEx.txt")
+    usrin1.setText(r"Main\examples\Iso_ListEx.txt")
+    usrin2.setText("_Example")
     infolbl.setText("Outputs will be: Iso1_pulled.txt, Iso2_pulled.txt, Iso3_pulled.txt")  
 def zelda_time(self):
     global w1
@@ -2001,24 +2275,16 @@ def zelda():
     except NameError:
         arg2 = "none"
         
-    arguments.append('scripts\Zelda.py')
+    arguments.append('Main\scripts\Zelda.py')
     arguments.append(arg1)
     arguments.append(arg2)
     args = " ".join(arguments)
 
-    if os.path.isfile(arg1) == True: #Checks to see if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('ZeldError.txt').read()
-        print(errMess)
-        error_hold()
-        Error()
+    os.system(args)
 
 def link_ex(self):
-    usrin1.setText(r"examples\Iso_ListEx.txt")
+    usrin1.setText(r"Main\examples\Iso_ListEx.txt")
+    usrin2.setText("_Example")
     infolbl.setText("Output will be IsoConcat.fasta")  
 def link_time(self):
     global w1
@@ -2028,31 +2294,20 @@ def link_time(self):
 def link():
     arguments = list()
     
-    try:
-        temp1 = arg1
-        temp2 = arg2
-    except NameError:
-        temp1 = "none"
-        temp2 = "none"
+    arg1 = temp1
+    arg2 = temp2
+
     
-    arguments.append('scripts\Link.py')
-    arguments.append(temp1)
-    arguments.append(temp2)
+    arguments.append('Main\scripts\Link.py')
+    arguments.append(arg1)
+    arguments.append(arg2)
     args = " ".join(arguments)
 
-    if os.path.isfile(temp1) == True: #Checks to see if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('LinkError.txt').read()
-        print(errMess)
-        error_hold()
-        Error()
+    os.system(args)
+
 
 def jam_ex(self):
-    usrin1.setText(r"examples\CleanMums.mums")
+    usrin1.setText(r"Main\examples\CleanMums.mums")
     if opt1.isChecked():
         of = "OutMUMs.bed"
     elif opt2.isChecked():
@@ -2069,7 +2324,7 @@ def jam_time(self):
 def jams(self):
     global errMess
     arguments = list()
-    path = "scripts" + "\\" + "autoJAMS.py"   
+    path = "Main\scripts" + "\\" + "autoJAMS.py"   
     arguments.append(path)
 
 
@@ -2077,7 +2332,7 @@ def jams(self):
         arg1 = temp1
         arguments.append(arg1)
         if text != "Other":
-            arg2 = "Chrom_Refs" + "\\" + text + ".txt"
+            arg2 = "Main\Chrom_Refs" + "\\" + text + ".txt"
         else:
             arg3 = fn2
             
@@ -2088,23 +2343,22 @@ def jams(self):
         arg1 = "none"
         noVar = "Missing at least one argument"
         errMess = noVar
-        Error()
 
 
     
     args = " ".join(arguments)
 
-    if os.path.isfile(arg1) == True: #Checks to see if the file exists
+    try:
         os.system(args)
-    else:
+    except Exception:
         os.system(args)
         errMess = QPlainTextEdit()
-        errMess=open('JamError.txt').read()
+        errMess = open('Error.log').read()
         error_hold()
         Error()
 
 def mumclean_ex(self):
-    usrin1.setText(r"examples\DirtyMums.mums")
+    usrin1.setText(r"Main\examples\DirtyMums.mums")
     infolbl.setText("Output will be CleanMUMs.mums")  
 def mumclean_time(self):
     global w1    
@@ -2113,7 +2367,7 @@ def mumclean_time(self):
     w1.show()  
 def mumcleaner():
     arguments = list()
-    arguments.append('scripts\MUMCleaner.py')
+    arguments.append('Main\scripts\MUMCleaner.py')
     try:
         arg1 = temp1
         arg2 = temp2
@@ -2127,20 +2381,12 @@ def mumcleaner():
     arguments.append(arg2)
     
     args = " ".join(arguments)
-    if os.path.isfile(arg1) == True:#See if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('CleanError.txt').read()
-        error_hold()
-        Error()
+    os.system(args)
 
 def  MUMi_ex(self):# Find way to get this working with some sample sequcnes
-    usrin1.setText("examples\Ex.mums")
-    usrin2.setText("examples\CBS138_Full.txt")
-    usrin3.setText("examples\BG2_Full.txt")
+    usrin1.setText("Main\examples\Ex.mums")
+    usrin2.setText("Main\examples\CBS138_Full.txt")
+    usrin3.setText("Main\examples\BG2_Full.txt")
 def mumi_time(self):
     global w1
     w.hide()
@@ -2149,7 +2395,7 @@ def mumi_time(self):
 def mumi():
     
     arguments = list()
-    arguments.append('scripts\MUMi.pl')
+    arguments.append('Main\scripts\MUMi.pl')
     try:
         arg1 = temp1
         arg2 = temp2
@@ -2165,26 +2411,21 @@ def mumi():
     arguments.append(arg3)
     
     args = " ".join(arguments)
-    print(args)
-    if os.path.isfile(arg1) == True and os.path.isfile(arg2) == True and os.path.isfile(arg3) == True:#See if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = "Can't find file. Check if any arguments are missing."
-        error_hold()
-        Error()
+    os.system.args()
     
     a = open('MUMi_out.txt').read()
     infolbl.setText("MUMi = "+ a)
 
+def outclose():
+    d.hide()
+    
 def N2M_time(self):
     global w1
     w1 = N2M()
     w1.show()  
 def n2m():
     arguments = list()
-    path = r"scripts\N2M.py"
+    path = r"Main\scripts\N2M.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2216,7 +2457,7 @@ def NCBI_CLEANER():
     w1 = N2M()
     w1.show()  
     arguments = list()
-    path = r"scripts\NCBICleaner.py"
+    path = r"Main\scripts\NCBICleaner.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2241,7 +2482,7 @@ def NCBI_CLEANER():
 
 
 def FF_ex(self):
-    usrin1.setText(r"examples\Gene_List.txt")
+    usrin1.setText(r"Main\examples\Gene_List.txt")
     usrin2.setText(r"RealEmail@Email.com")
     infolbl.setText("Output will be a value")  
 def fastA_time(self):
@@ -2261,25 +2502,16 @@ def FF():
         arg3 = "none"   
 
     
-    arguments.append('scripts\FastAFetcher.py')
+    arguments.append('Main\scripts\FastAFetcher.py')
     arguments.append(arg1)
     arguments.append(arg2)
     arguments.append(arg3)
     args = " ".join(arguments)
 
-    if os.path.isfile(temp1) == True: #Checks to see if the file exists
-        os.system(args)
-    else:
-        global errMess
-        os.system(args)
-        errMess = QPlainTextEdit()
-        errMess=open('AUTONCBIError.txt').read()
-        print(errMess)
-        error_hold()
-        Error()
+    os.system(args)
     
 def ss_ex(self):
-    usrin1.setText(r"examples\CBS138_Full.txt")
+    usrin1.setText(r"Main\examples\CBS138_Full.txt")
     usrin2.setText("10")
     usrin3.setText("30")
     usrin4.setText("1")
@@ -2291,7 +2523,7 @@ def seqstract_time(self):
     w1.show()  
 def seqstracter():
     arguments = list()
-    path = r"scripts\SeqStracter.py"
+    path = r"Main\scripts\SeqStracter.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2322,7 +2554,7 @@ def seqstracter():
         Error()
 
 def mseqstraq_ex(self):
-    usrin1.setText("examples\CBS138")
+    usrin1.setText("Main\examples\CBS138")
     usrin2.setText("_Example")
     infolbl.setText("Output will be in examples folder as CBS138_Example_genes.txt")
 def mseqstract_time(self):
@@ -2333,7 +2565,7 @@ def mseqstract_time(self):
 def mseqstract():
 
     arguments = list()
-    path = r"scripts\MultiSeqStracter.py"
+    path = r"Main\scripts\MultiSeqStracter.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2356,7 +2588,7 @@ def mseqstract():
         Error()
 
 def mmseqstraq_ex(self):
-    usrin1.setText("examples\Iso_List.txt")
+    usrin1.setText("Main\examples\Iso_List.txt")
     usrin2.setText("_Example")
     infolbl.setText("Output will be in examples folder with the Example_genes.txt appended to each isolate")
 def mmseqstract_time(self):
@@ -2365,16 +2597,17 @@ def mmseqstract_time(self):
     w1 = MMSeqStrac()
     w1.show()  
 def mmseqstract():
+
     arguments = list()
-    path = r"scripts\MegaMultiSeqStracter.py"
+    path = r"Main\scripts\MegaMultiSeqStracter.py"
     arguments.append(path)
     try:
         arg1 = temp1
         arg2 = temp2
-    except IndexError:
+    except IndexError or NameError:
+        arg1 = temp1
         arg2 = "none"
 
-        
     arguments.append(arg1)
     arguments.append(arg2)
     args = " ".join(arguments)
@@ -2390,7 +2623,7 @@ def mmseqstract():
 
 
 def genestract_ex(self):
-    usrin1.setText("examples\CBS138_Example_genes.txt")
+    usrin1.setText("Main\examples\CBS138_Example_genes.txt")
     usrin2.setText("CAGL0L03520g")
     infolbl.setText("Output will be CAGL0L03520g.txt")    
 def genestract_time(self):
@@ -2400,7 +2633,7 @@ def genestract_time(self):
     w1.show()
 def genestracter():
     arguments = list()
-    path = r"scripts\Genestracter.py"
+    path = r"Main\scripts\Genestracter.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2424,8 +2657,8 @@ def genestracter():
         Error()
 
 def mgenestract_ex(self):
-    usrin1.setText("examples\Small_Gene_List.txt")
-    usrin2.setText("examples\CBS138")
+    usrin1.setText("Main\examples\Small_Gene_List.txt")
+    usrin2.setText("Main\examples\CBS138")
     usrin3.setText("_Example")
     infolbl.setText("Output will be CBS138_Example_pulled.txt")       
 def mgenestract_time(self):
@@ -2435,7 +2668,7 @@ def mgenestract_time(self):
     w1.show()
 def mgenestracter():
     arguments = list()
-    path = r"scripts\MultiGeneStracter.py"
+    path = r"Main\scripts\MultiGeneStracter.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2461,9 +2694,47 @@ def mgenestracter():
         error_hold()
         Error()
 
+def Mgenestract_ex(self):
+    usrin1.setText("Main\examples\Iso_List.txt")
+    usrin2.setText("CAGL0M07656g")
+    usrin3.setText("_Example_genes")
+    infolbl.setText("Output will be Isolates_CAGL0M07656g.fasta")       
+def Mgenestract_time(self):
+    global w1
+    w.hide()
+    w1 = MGeneStrac()
+    w1.show()
+def Mgenestracter():
+    arguments = list()
+    path = r"Main\scripts\MegaGeneStracter.py"
+    arguments.append(path)
+    try:
+        arg1 = temp1
+        arg2 = temp2
+        arg3 = temp3
+    except IndexError:
+        arg1 = temp1
+        arg2 = temp2
+        arg3 = "none"
+
+        
+    arguments.append(arg1)
+    arguments.append(arg2)
+    arguments.append(arg3)
+    args = " ".join(arguments)
+    if os.path.isfile(arg1) == True:#See if the file exists
+        os.system(args)
+    else:
+        global errMess
+        os.system(args)
+        errMess = QPlainTextEdit()
+        errMess=open('mGSError.txt').read()
+        error_hold()
+        Error()
+
 def mmgenestract_ex(self):
-    usrin1.setText("examples\Iso_List.txt")
-    usrin2.setText("examples\Small_Gene_List.txt")
+    usrin1.setText("Main\examples\Iso_List.txt")
+    usrin2.setText("Main\examples\Small_Gene_List.txt")
     usrin3.setText("_Example")
     infolbl.setText("Output will be CBS138_Example_pulled.txt and BG2_Example_pulled.txt")     
 def mmgenestract_time(self):
@@ -2473,7 +2744,7 @@ def mmgenestract_time(self):
     w1.show()
 def mmgenestracter():
     arguments = list()
-    path = r"scripts\MegaMultiGeneStracter.py"
+    path = r"Main\scripts\MegaMultiGeneStracter.py"
     arguments.append(path)
     try:
         arg1 = temp1
@@ -2500,7 +2771,7 @@ def mmgenestracter():
         Error()
 
 def randogene_ex(self):
-    usrin1.setText("examples\Gene_List.txt")
+    usrin1.setText("Main\examples\Gene_List.txt")
     usrin2.setText("45")
     infolbl.setText("Output will be RandPick.txt")
 def randogene_time(self):
@@ -2539,16 +2810,20 @@ def BE(self):
 #M for manual hold    
 def marg1_hold(marg1): #Temporarily stores 1st argument
     global temp1
-    temp1 = "none"
-    temp1 = marg1
+    if marg1 == "":
+        temp1 = "none"
+    else:
+        temp1 = marg1.strip()
 def marg2_hold(marg2): #Temporarily stores 2nd argument
     global temp2
-    temp2 = "None"
-    temp2 = marg2
+    if marg2 == " ":
+        temp2 = "none"
+    else:
+        temp2 = marg2.strip()
 def marg3_hold(marg3): #Temporarily stores 3rd argument
     global temp3
     temp3 = "none"
-    temp3 = marg3
+    temp3 = marg3.strip()
 def marg4_hold(marg4): #Temporarily stores 4th argument
     global temp4
     temp4 = marg4
@@ -2559,12 +2834,21 @@ def error_hold():
 def finished_Process():
     global d
     global error
+    global errMess
+    if os.path.isfile('Error.log') == True: #Checks to see if theres an existing error file
+        errMess = QPlainTextEdit()
+        errMess = open('Error.log').read()
+        
+        if ("Error" in errMess): #Checks to see if it's blank or actually contains an error
+            error_hold()
+            Error()
+    
     if error == False:
         d = Done()
         d.show()
     error = False #resets back to false so it can recheck later
 
-#File locaters
+#File finders
 def file1_find(self):
     global fn1
     path = "\\"
@@ -2577,7 +2861,7 @@ def file1_find(self):
         folder = (files1.split("/")[-2])
         fn1 = (str(filename1[:-2]))
     
-        if folder == "PythonUI":
+        if folder == "MNM":
             Fn1 = fn1
         else:
             Fn1 = (folder + path + fn1)#Also gets the path
@@ -2594,7 +2878,7 @@ def file2_find(self):
         fn2 = (str(filename2[:-2]))
         folder = (files2.split("/")[-2])
     
-        if folder == "PythonUI":
+        if folder == "MNM":
             Fn2 = fn2
         else:
             Fn2 = (folder + path + fn2)#Also gets the path
@@ -2612,7 +2896,7 @@ def file3_find(self):
         fn3 = (str(filename3[:-2]))
         folder = (files3.split("/")[-2])
     
-        if folder == "PythonUI":
+        if folder == "MNM":
             Fn3 = fn3
         else:
             Fn3 = (folder + path + fn3)#Also gets the path
@@ -2620,14 +2904,14 @@ def file3_find(self):
         usrin3.setText(Fn3)
     
 def show_help(self):
-    os.startfile(r'README\AOT_README.txt') 
+    os.startfile(r'Main\README\AOT_README.txt') 
 def show_use(self):
-    os.startfile(r'README\USES_README.txt')
+    os.startfile(r'Main\README\USES_README.txt')
 
 
 
 #Main Window Transitions
-def working(self): #Work in progress
+def working(): #Work in progress
     global w2
     w2 = Working()
     w2.show()
@@ -2640,7 +2924,10 @@ def ext_options(self):
     global w
     w = ExtracWindow()
     w.show()
-    
+def premade(self):
+    global w
+    w = PreMade()
+    w.show()
 def help_options(self):
     global w
     w = HelpWindow()

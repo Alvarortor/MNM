@@ -1,0 +1,19 @@
+Checklist
+
+For all
+1. Collect gene sequences via FastAFinder
+2. Chomp all isolate files
+3. Locate and extract sequences from isolate files using:
+	1. NUCmer
+	2. Show-coords
+	3. SeqStracter
+
+For variant screening
+4. Group genes from isolate files with MegaGeneStracter
+5. Extract reference sequence from file with RefGet
+6. Collect SNPs using:
+	1. PROmer
+	2. Show-snps
+	3. SNProcesser
+
+

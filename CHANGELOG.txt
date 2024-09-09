@@ -1,0 +1,19 @@
+Version 1.0.0 09/09/2024
+
+- Corrected SeqStracter scripts to convert lowercase nuceotides
+- Included visuals for checking if PERL is installed
+- Added messagebox with install instructions for PERL on Windows devices
+- Began implementing premade workflows for ease of use
+- Moved all preexisting example materials, assets, and scripts into sub folder to reduce clutter in file system
+- Improved error handling for String Manipulation Scripts
+
+==============================================================================================
+Version 0.1.1 08/10/2024
+
+- Added example inputs to all scripts
+- Defended Thesis
+
+===============================================================================================
+Version 0.1.0 07/28/2024
+
+- Intial Release

@@ -1,0 +1,15 @@
+[Chr]	[Size]
+ChrA_C_glabrata_BG2	510173
+ChrB_C_glabrata_BG2	514772
+ChrC_C_glabrata_BG2	554850
+ChrD_C_glabrata_BG2	702307
+ChrE_C_glabrata_BG2	708771
+ChrF_C_glabrata_BG2	940328
+ChrG_C_glabrata_BG2	1010829
+ChrH_C_glabrata_BG2	1018141
+ChrI_C_glabrata_BG2	759829
+ChrJ_C_glabrata_BG2	1244406
+ChrK_C_glabrata_BG2	1310637
+ChrL_C_glabrata_BG2	1895715
+ChrM_C_glabrata_BG2	1895715
+

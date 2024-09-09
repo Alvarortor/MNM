@@ -1,0 +1,80 @@
+#RandoPuller
+#Picks random lines from file
+#For best results keep value to less than 0.5 of original input
+#Usage: RandoPicker.py <file.txt> number
+#One gene per line
+
+#Imports
+import os #So it can search through device
+import re #Regexes
+import sys #Accept input from command line but without needing to type
+import random #randomize selections
+
+
+#Catches missing arguments
+myFile = "none"
+myWant = "none"
+
+#input args
+try:
+    myFile = sys.argv[1]
+    myWant = int(sys.argv[2])
+
+except IndexError:
+    if myFile == "-h":  
+        print("Picks random lines from file\nFor best results keep value to less than 0.5 of original input\nUsage: RandoPicker.py <file.txt> number\nOne gene per line.py <file.mums>")
+        sys.exit()    
+    elif myFile == "none":
+        print ("Error: Did not define input file. Use the -h option for help")
+        sys.exit()
+    elif myWant == "none":
+        print("You need to specify a number dummy")
+        sys.exit()
+#Get path to the file
+inpath = os.path.abspath(myFile)
+
+#Create outputs
+myOF =" RandPick.txt"
+outpath = os.path.abspath(myOF)
+outFile = open(outpath, "w");
+#Just remove white spaces around numbers?
+
+#open input file
+file = open(inpath);
+
+#Lists
+have = list()
+cleanList = list()
+genes = list()
+outlist = list()
+
+
+#Get genes into array
+for line in file:
+    temp1 = line.strip()
+    temp2 = temp1.split()
+    genes.append(temp2 )
+
+
+#Get some extra for removing later on
+while (myWant * 2) > len(have):
+    pick = random.choice(genes)
+    have.extend(pick)
+    
+    
+#Removes duplicates  
+temp_list = list(set(have)) 
+
+ 
+
+#Transfers unique genes to new list until desired amount is reached
+mycount = 0
+while mycount < myWant:
+        outlist.append(temp_list[mycount])
+        mycount += 1
+
+#Final output!
+for item in outlist:
+    outFile.write(str(item) + "\n") #removes bracket, comma, and creates newline between elements of list
+    
+print("Randomly selected", len(outlist), "genes")
